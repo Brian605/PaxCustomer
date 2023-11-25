@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="UnusedAttribute">
+<item
+    android:title="@string/request"
+    android:id="@+id/request"
+    android:icon="@drawable/request"
+    android:iconTint="@null"
+    />
+    <item
+        android:title="My Trips"
+        android:id="@+id/trips"
+        android:icon="@drawable/trips"
+        android:iconTint="@null"/>
+
+    <item
+        android:title="Account"
+        android:id="@+id/account"
+        android:icon="@drawable/account"
+        android:iconTint="@null"/>
+    <item
+        android:title="Help"
+        android:id="@+id/help"
+        android:icon="@drawable/help"
+        android:iconTint="@null"/>
+    <item
+        android:title="More"
+        android:id="@+id/more"
+        android:icon="@drawable/more"
+        android:iconTint="@null">
+
+    </item>
+</menu>

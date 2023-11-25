@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>DEFAULT_PERCENTAGE</key>
+        <value>20</value>
+    </entry>
+    <entry>
+        <key>DEFAULT_AMOUNT</key>
+        <value>50</value>
+    </entry>
+    <entry>
+        <key>DEFAULT_AMOUNT_NAIROBI</key>
+        <value>105</value>
+    </entry>
+    <entry>
+        <key>NIGHT_AMOUNT_NAIROBI</key>
+        <value>130</value>
+    </entry>
+    <entry>
+        <key>NIGHT_AMOUNT</key>
+        <value>70</value>
+    </entry>
+    <entry>
+        <key>DEFAULT_PERCENTAGE_NAIROBI</key>
+        <value>35</value>
+    </entry>
+    <entry>
+        <key>ACTIVATE_RIDERS</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>MINIMUM_DISTANCE</key>
+        <value>1.5</value>
+    </entry>
+
+    <entry>
+        <key>MINIMUM_DISTANCE_NAIROBI</key>
+        <value>1.0</value>
+    </entry>
+    <entry>
+        <key>NAIROBI_BELOW_05</key>
+        <value>60</value>
+    </entry>
+    <entry>
+        <key>NAIROBI_ONE_TO_NINE</key>
+        <value>38</value>
+    </entry>
+    <entry>
+        <key>NAIROBI_ZERO_TO_ONE</key>
+        <value>110</value>
+    </entry>
+    <entry>
+        <key>NAIROBI_ABOVE_TEN</key>
+        <value>12</value>
+    </entry>
+
+    <entry>
+        <key>ALLOW_RIDERS</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>Central</key>
+        <value>Nyandarua,Nyeri,Kirinyaga,Murang'a,Kiambu</value>
+    </entry>
+    <entry>
+        <key>Coastal</key>
+        <value>Mombasa,Kwale,Kilifi,Tana River,Lamu,Taita Taveta</value>
+    </entry>
+    <entry>
+        <key>North Eastern</key>
+        <value>Garissa,Wajir,Mandera</value>
+    </entry>
+    <entry>
+        <key>Eastern</key>
+        <value>Marsabit,Isiolo,Meru,Tharaka-Nithi,Embu,Kitui,Machakos,Makueni</value>
+    </entry>
+    <entry>
+        <key>Nairobi</key>
+        <value>Nairobi</value>
+    </entry>
+    <entry>
+        <key>North Rift Valley</key>
+        <value>Turkana,West Pokot,Samburu,Trans Nzoia,Uasin Gishu,Elgeyo Marakwet,Nandi,Baringo,Laikipia</value>
+    </entry>
+    <entry>
+        <key>South Rift Valley</key>
+        <value>Nakuru,Narok,Kajiado,Kericho,Bomet</value>
+    </entry>
+    <entry>
+        <key>Nyanza</key>
+        <value>Siaya,Kisumu,Homa Bay,Migori,Kisii,Nyamira</value>
+    </entry>
+    <entry>
+        <key>Western</key>
+        <value>Kakamega,Vihiga,Bungoma,Busia</value>
+    </entry>
+</defaultsMap>

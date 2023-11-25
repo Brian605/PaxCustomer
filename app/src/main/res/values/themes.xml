@@ -2,11 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PaxCustomer" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
+
     </style>
 
     <style name="Theme.PaxCustomer" parent="Base.Theme.PaxCustomer" />
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.PaxCustomer.Starting" parent="Theme.SplashScreen">
         <!-- Set the splash screen background, animated icon, and animation
         duration. -->
         <item name="windowSplashScreenBackground">@color/white</item>

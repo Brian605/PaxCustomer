@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".auth.LoginFragment">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/inter"
+            android:text="@string/pax"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@color/primary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/boda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/pax"
+            android:fontFamily="@font/inter"
+            android:text="@string/boda"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@color/secondary"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:text="@string/what_s_your_phone_number"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_below="@+id/header"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/header2"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/e_g_07xxx_or_01xxx"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            app:hintTextColor="@color/black"
+            android:layout_below="@+id/header2"
+            app:boxStrokeColor="@color/black"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/phoneHolder"
+            app:counterEnabled="true"
+            app:counterMaxLength="10"
+            app:counterTextColor="@color/primary">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/phoneInput"
+                android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneHolder"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/next"
+        android:padding="10dp"
+        app:icon="@drawable/baseline_arrow_forward_24"
+        app:iconGravity="end"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:cornerRadius="10dp" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        app:trackColor="@color/black"
+        app:indicatorColor="@color/primary"
+        app:trackThickness="10dp"
+        app:indicatorSize="70dp"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnLogin"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

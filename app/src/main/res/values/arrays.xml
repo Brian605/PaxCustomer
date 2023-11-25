@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="counties">
+        <item>Mombasa</item>
+        <item>Kwale</item>
+        <item>Kilifi</item>
+        <item>Tana_River</item>
+        <item>Lamu</item>
+        <item>Taita_Taveta</item>
+        <item>Garissa</item>
+        <item>Wajir</item>
+        <item>Mandera</item>
+        <item>Marsabit</item>
+        <item>Isiolo</item>
+        <item>Meru</item>
+        <item>Tharaka_Nithi</item>
+        <item>Embu</item>
+        <item>Kitui</item>
+        <item>Machakos</item>
+        <item>Makueni</item>
+        <item>Nyandarua</item>
+        <item>Nyeri</item>
+        <item>Kirinyaga</item>
+        <item>Muranga</item>
+        <item>Kiambu</item>
+        <item>Turkana</item>
+        <item>West_Pokot</item>
+        <item>Samburu</item>
+        <item>Trans_Nzoia</item>
+        <item>Uasin_Gishu</item>
+        <item>Elgeyo_Marakwet</item>
+        <item>Nandi</item>
+        <item>Baringo</item>
+        <item>Laikipia</item>
+        <item>Nakuru</item>
+        <item>Narok</item>
+        <item>Kajiado</item>
+        <item>Kericho</item>
+        <item>Bomet</item>
+        <item>Kakamega</item>
+        <item>Vihiga</item>
+        <item>Bungoma</item>
+        <item>Busia</item>
+        <item>Siaya</item>
+        <item>Kisumu</item>
+        <item>Homa_Bay</item>
+        <item>Migori</item>
+        <item>Kisii</item>
+        <item>Nyamira</item>
+        <item>Nairobi</item>
+    </string-array>
+    <string-array name="nairobi_areas">
+        <item>Westlands</item>
+        <item>Dagoretti</item>
+        <item>Langata</item>
+        <item>Kibra</item>
+        <item>Roysambu</item>
+        <item>Kasarani</item>
+        <item>Ruaraka</item>
+        <item>Embakasi</item>
+        <item>Makadara</item>
+        <item>Kamukunji</item>
+        <item>Starehe</item>
+        <item>Mathare</item>
+        <item>Kitisuru</item>
+        <item>Parklands</item>
+        <item>Highridge</item>
+        <item>Kangemi</item>
+        <item>Karura</item>
+        <item>Mountain View</item>
+        <item>Kilimani</item>
+        <item>Kawangware</item>
+        <item>Gatina</item>
+        <item>Kileleshwa</item>
+        <item>Kabiro</item>
+        <item>Mutuini</item>
+        <item>Ngando</item>
+        <item>Riruta</item>
+        <item>Uthiru</item>
+        <item>Ruthimitu</item>
+        <item>Waithaka</item>
+        <item>Karen</item>
+        <item>Nairobi West</item>
+        <item>Nyayo Highrise</item>
+        <item>South C</item>
+        <item>Laini Saba</item>
+        <item>Lindi</item>
+        <item>Makina</item>
+        <item>Woodley</item>
+        <item>Golf Course</item>
+        <item>Sarangombe</item>
+        <item>Githurai</item>
+        <item>Kahawa West</item>
+        <item>Zimmerman</item>
+        <item>Roysambu</item>
+        <item>Kahawa</item>
+        <item>Clay City</item>
+        <item>Mwiki</item>
+        <item>Kasarani</item>
+        <item>Njiru Shopping</item>
+        <item>Ruai</item>
+        <item>Kamulu</item>
+        <item>Babadogo</item>
+        <item>Utalii</item>
+        <item>Mathare North</item>
+        <item>Lucky Summer</item>
+        <item>Korogocho</item>
+        <item>Imara Daima</item>
+        <item>Kwa Njenga</item>
+        <item>Kwa Reuben</item>
+        <item>Pipeline</item>
+        <item>Kware</item>
+        <item>Kariobangi</item>
+        <item>Dandora</item>
+        <item>Kayole</item>
+        <item>Komarock</item>
+        <item>Chokaa</item>
+        <item>Matopeni</item>
+        <item>Spring Valley</item>
+        <item>Savanna</item>
+        <item>Utawala</item>
+        <item>Mihango</item>
+        <item>Umoja</item>
+        <item>Mowlem</item>
+        <item>Maringo</item>
+        <item>Hamza</item>
+        <item>Viwandani</item>
+        <item>Harambee</item>
+        <item>Makongeni</item>
+        <item>Pumwani</item>
+        <item>Eastleigh</item>
+        <item>Airbase</item>
+        <item>California</item>
+        <item>Ngara</item>
+        <item>Pangani</item>
+        <item>Ziwani</item>
+        <item>Kariokor</item>
+        <item>Landimawe</item>
+        <item>Mabatini</item>
+        <item>Huruma</item>
+        <item>Ngei</item>
+        <item>Mlango Kubwa</item>
+        <item>Kiamaiko</item>
+    </string-array>
+
+</resources>

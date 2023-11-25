@@ -43,4 +43,14 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="what_s_your_full_name">What\'s your full name?</string>
+    <string name="your_name">Your Name</string>
+    <string name="create_my_account">Create My Account</string>
+    <string name="boda">Boda</string>
+    <string name="pax">Pax</string>
+    <string name="what_s_your_phone_number">What\'s your phone number?</string>
+    <string name="e_g_07xxx_or_01xxx">e.g 07XXX or 01XXX</string>
+    <string name="request">Request</string>
+    <string name="where_to">Where To?</string>
+    <string name="pickup_point">Pickup point</string>
 </resources>
