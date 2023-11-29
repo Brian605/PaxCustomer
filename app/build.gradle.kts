@@ -11,11 +11,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.paxboda.customer"
+        applicationId = "com.ebodasolutions.ebodarides"
         minSdk = 23
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 37
+        versionName = "0.01rc37"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

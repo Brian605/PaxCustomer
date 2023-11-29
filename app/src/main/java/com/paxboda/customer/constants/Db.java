@@ -2,7 +2,7 @@ package com.paxboda.customer.constants;
 
 public interface Db {
     String USERS="Users";
-    String TRIPS="TTrips";
+    String TRIPS="Trips";
     String TOKENS="Tokens";
     String WALLETS="Wallet";
     String LOGS="TLogs";
@@ -12,5 +12,6 @@ public interface Db {
     String SUB_COUNTIES="Sub_Counties";
     String STAGES="Stages";
     String COUNTIES="Counties";
+    String REASONS="Reasons";
 
 }

@@ -14,8 +14,43 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+-keep class com.google.android.gms.internal.** { *; }
+
+-keep class com.google.firebase.database.**{*;}
+-keep class com.firebase.geofire.**{*;}
+-keepattributes *Annotation*
+-keepclassmembers class com.ebodasolutions.ebodarides.services.*{
+*;
+}
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+-keep class com.paxboda.customer.models.Journey{*;}
+-keep class com.paxboda.customer.models.LocationObj{*;}
+-keep class com.paxboda.customer.models.MyLocation{*;}
+-keep class com.paxboda.customer.models.Reason{*;}
+-keep class com.paxboda.customer.models.Token{*;}
+-keep class com.paxboda.customer.models.User{*;}
+-keep class com.paxboda.customer.models.Version{*;}

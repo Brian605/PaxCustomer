@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="cancellation_reasons">
+        <item>No longer needed</item>
+        <item>Rider took too long</item>
+        <item>Rider did not respond</item>
+        <item>Rider went the wrong way</item>
+    </string-array>
     <string-array name="counties">
         <item>Mombasa</item>
         <item>Kwale</item>

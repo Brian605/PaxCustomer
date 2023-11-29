@@ -66,6 +66,7 @@ import com.paxboda.customer.listeners.CompleteListener
 import com.paxboda.customer.models.Journey
 import com.paxboda.customer.models.LocationObj
 import com.paxboda.customer.models.MyLocation
+import com.paxboda.customer.models.Reason
 import com.paxboda.customer.models.User
 import com.paxboda.customer.service.MyLocationService
 import com.paxboda.customer.utils.Commons
@@ -86,8 +87,9 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 
-class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCallback,LifecycleOwner {
-    private var tripDistance: String?=null
+class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCallback,
+    LifecycleOwner {
+    private var tripDistance: String? = null
     private lateinit var googleMap: GoogleMap
     private lateinit var defaultLocation: LatLng
     private var grayPolyline: Polyline? = null
@@ -137,12 +139,11 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
         binding.summaryLayout.hide()
         binding.postingLayout.hide()
         binding.post.setOnClickListener {
-            if (nearbyPhones.isEmpty()){
+            if (nearbyPhones.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("No riders nearby")
                     .setMessage("There are no riders nearby to handle your request.Kindly try again later")
-                    .setPositiveButton("Okay"){
-                        dialog,_->
+                    .setPositiveButton("Okay") { dialog, _ ->
                         dialog?.dismiss()
                     }.create()
                     .show()
@@ -150,37 +151,71 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
             }
             binding.summaryLayout.hide()
             binding.postingLayout.show()
-           val ref= Firebase.firestore.collection(Db.TRIPS)
-                .document(trip.journeyId.toString());
-            ref
-                .set(trip)
+            val ref = Firebase.firestore.collection(Db.TRIPS)
+                .document(trip.journeyId.toString())
+            ref.set(trip)
                 .addOnSuccessListener {
-                    binding.waitingMessage.text="Posted!! Calling riders..."
+                    binding.waitingMessage.text = "Posted!! Calling riders..."
                     binding.cancel.show()
                     sendNotification()
                     listenForChanges(ref)
                 }
         }
+        binding.cancel.setOnClickListener {
+        val reasons=resources.getStringArray(R.array.cancellation_reasons)
+            MaterialAlertDialogBuilder(requireContext())
+                .setBackground(ContextCompat.getDrawable(requireContext(),R.drawable.bg_white_rounded_10))
+                .setSingleChoiceItems(reasons,0){
+                    dialog,which->
+                    dialog?.dismiss()
+                    binding.progress.show()
+                    val reason=Reason(currentUser.user_id,trip.journeyId.toString(),reasons[which])
+                    Firebase.firestore.collection(Db.TRIPS)
+                        .document(trip.journeyId.toString())
+                        .update("status",Constants.CANCELLED)
+                        .addOnSuccessListener {
+                             if (isAdded){
+                                 binding.progress.hide()
+                                 requireActivity().toast("Request cancelled")
+                                 requireActivity().recreate()
+                            }
+                        }
+                    Firebase.firestore.collection(Db.REASONS)
+                        .add(reason)
+                        .addOnSuccessListener {
+                            binding.progress.hide()
+                        }
+                }
+                .setTitle("Please provide a reason for cancelling the request")
+                .create()
+                .show()
+        }
         return binding.root
     }
 
     private fun listenForChanges(it: DocumentReference?) {
-        it?.addSnapshotListener (requireActivity()){ value, error ->
-            if (error!=null || value==null || !value.exists()){
+        it?.addSnapshotListener(requireActivity()) { value, error ->
+            if (error != null || value == null || !value.exists()) {
                 return@addSnapshotListener
             }
-            val currentTrip=value.toObject(Journey::class.java)
-            if (currentTrip!!.status==Constants.ACCEPTED){
-                binding.waitingMessage.text="Request accepted!!. The rider is on his way"
-            }else
-            if (currentTrip.status==Constants.RUNNING){
-                binding.waitingMessage.text="Trip started"
-                binding.cancel.hide()
-            }else
-                if (currentTrip.status==Constants.ENDED){
-                    requireActivity().toast("Trip completed. Thank you for choosing pax boda")
-                    binding.postingLayout.hide()
+            val currentTrip = value.toObject(Journey::class.java)
+            if (currentTrip!!.status == Constants.ACCEPTED) {
+                binding.waitingMessage.text = "Request accepted!!. The rider is on his way"
+            } else
+                if (currentTrip.status == Constants.RUNNING) {
+                    binding.waitingMessage.text = "Trip started"
+                    binding.cancel.hide()
+                } else
+                    if (currentTrip.status == Constants.ENDED) {
+                        requireActivity().toast("Trip completed. Thank you for choosing pax boda")
+                        binding.postingLayout.hide()
+                    }
+            else
+            if (currentTrip.status==Constants.CANCELLED){
+                if (isAdded){
+                    requireActivity().recreate()
                 }
+            }
         }
     }
 
@@ -188,7 +223,7 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
         AndroidNetworking.get("https://paxgeofire-dot-janpaxapps.uc.r.appspot.com/notify/${trip.fromName}/${pickupLatLng!!.latitude}/${pickupLatLng!!.longitude}/${trip.journeyId}")
             .setPriority(Priority.IMMEDIATE)
             .build()
-            .getAsString(object :StringRequestListener{
+            .getAsString(object : StringRequestListener {
                 override fun onResponse(response: String?) {
 
                 }
@@ -263,7 +298,7 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
                 } else {
                     val trip = it.first().toObject(Journey::class.java)
                     if (trip.status == Constants.PENDING || trip.status == Constants.ACCEPTED || trip.status == Constants.RUNNING) {
-                        setUpTrip()
+                        setUpTrip(trip,it.first().reference)
                     } else {
                         getCurrentLocation()
                     }
@@ -271,7 +306,44 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
             }
     }
 
-    private fun setUpTrip() {
+    private fun setUpTrip(thisTrip:Journey,reference: DocumentReference) {
+ trip=thisTrip
+        binding.pickupValue.setText(trip.fromName)
+        binding.destinationValue.setText(trip.toName)
+        pickupLatLng=LatLng(trip.fromLatLng.latitude,trip.fromLatLng.longitude)
+        destinationLatLng=LatLng(trip.toLatLng.latitude,trip.toLatLng.longitude)
+        originMarker=addOriginMarkerAndGet(pickupLatLng!!)
+        destinationMarker=addDestinationMarkerAndGet(destinationLatLng!!)
+        drawRoute()
+        if (trip.status==Constants.PENDING){
+            binding.cancel.show()
+            binding.waitingMessage.text="Posted.Calling Riders..."
+            sendNotification()
+        }else
+        if (trip.status==Constants.RUNNING){
+            binding.cancel.hide()
+            binding.waitingMessage.text="Trip in progress..."
+            listenForRider(trip.journeyId)
+
+        }else
+            if (trip.status==Constants.ACCEPTED){
+                binding.cancel.show()
+                binding.waitingMessage.text="Rider is on the way..."
+                listenForRider(trip.journeyId)
+
+            }
+        else
+            if(trip.status==Constants.ENDED){
+                if (isAdded){
+                    requireActivity().toast("You have reached your destination")
+                    requireActivity().recreate()
+                }
+            }
+        binding.postingLayout.show()
+        listenForChanges(reference)
+    }
+
+    private fun listenForRider(journeyId:Int) {
 
     }
 
@@ -410,7 +482,10 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
 
     private fun addMarker(key: String, riderLocation: Location) {
         requireActivity().runOnUiThread {
-            val rotation=MapUtils.getRotation(pickupLatLng!!,LatLng(riderLocation.latitude,riderLocation.longitude))
+            val rotation = MapUtils.getRotation(
+                pickupLatLng!!,
+                LatLng(riderLocation.latitude, riderLocation.longitude)
+            )
             val marker = googleMap.addMarker(
                 MarkerOptions()
                     .position(LatLng(riderLocation.latitude, riderLocation.longitude))
@@ -450,14 +525,14 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
         setUpPickupAndDestinationAdapters()
         pickupLatLng = defaultLocation
         originMarker = addOriginMarkerAndGet(defaultLocation)
-        MapUtils.reverseGeocode(object :CompleteListener{
+        MapUtils.reverseGeocode(object : CompleteListener {
             override fun onComplete(value: String) {
-                trip.fromName=value
+                trip.fromName = value
                 binding.pickupValue.setText(value)
-                fromAddress=value
-                Log.e("Reversed",value)
+                fromAddress = value
+                Log.e("Reversed", value)
             }
-        },pickupLatLng!!)
+        }, pickupLatLng!!)
 
     }
 
@@ -509,26 +584,25 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
                 val placeFields = listOf(
                     Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG
                 )
-                var request: FetchPlaceRequest?
-                request = FetchPlaceRequest.builder(placeID, placeFields)
+                val request: FetchPlaceRequest? = FetchPlaceRequest.builder(placeID, placeFields)
                     .build()
 
-                    request?.let {
-                        placesClient.fetchPlace(it).addOnSuccessListener { task ->
-                            binding.progress.hide()
-                            destinationLatLng =
-                                LatLng(task.place.latLng!!.latitude, task.place.latLng!!.longitude)
-                            trip.toName = task.place.name!!
-                            showApproximateSummary()
-                            drawRoute()
+                request?.let {
+                    placesClient.fetchPlace(it).addOnSuccessListener { task ->
+                        binding.progress.hide()
+                        destinationLatLng =
+                            LatLng(task.place.latLng!!.latitude, task.place.latLng!!.longitude)
+                        trip.toName = task.place.name!!
+                        showApproximateSummary()
+                        drawRoute()
 
-                        }
-                            .addOnFailureListener { e ->
-                                binding.progress.hide()
-                                e.printStackTrace()
-                                requireActivity().toast("Failed to retrieve location")
-                            }
                     }
+                        .addOnFailureListener { e ->
+                            binding.progress.hide()
+                            e.printStackTrace()
+                            requireActivity().toast("Failed to retrieve location")
+                        }
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -565,47 +639,50 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
     }
 
     private fun showApproximateSummary() {
-        if (pickupLatLng==null || destinationLatLng ==null){
+        if (pickupLatLng == null || destinationLatLng == null) {
             return
         }
         val distance = getDistance()
         var cost: Int
-        val nai=resources.getStringArray(R.array.nairobi_areas)
-        if (fromAddress.contains("Nairobi",true)|| nai.any {
-                it.contains(fromAddress,true) || fromAddress.contains(it,true)
-            }){
-            cost=roundToNearest10(getNairobiPricing(distance))
-        }else{
-            val amount= Firebase.remoteConfig.getLong("DEFAULT_AMOUNT").toString().toInt()
+        val nai = resources.getStringArray(R.array.nairobi_areas)
+        if (fromAddress.contains("Nairobi", true) || nai.any {
+                it.contains(fromAddress, true) || fromAddress.contains(it, true)
+            }) {
+            cost = roundToNearest10(getNairobiPricing(distance))
+        } else {
+            val amount = Firebase.remoteConfig.getLong("DEFAULT_AMOUNT").toString().toInt()
             val percentage = Firebase.remoteConfig.getLong("DEFAULT_PERCENTAGE").toString().toInt()
-            val minimumDistance= Firebase.remoteConfig.getDouble("MINIMUM_DISTANCE")
+            val minimumDistance = Firebase.remoteConfig.getDouble("MINIMUM_DISTANCE")
             if (getCurrentTime() in 6..19) {
                 if (distance <= minimumDistance) {
                     cost = amount
                 } else {
-                    cost = (((distance.minus(minimumDistance)).times(percentage)).toInt()).plus(amount)
+                    cost =
+                        (((distance.minus(minimumDistance)).times(percentage)).toInt()).plus(amount)
                     cost = (round((cost + 5) / 10.0) * 10).roundToInt()
                 }
-            }else{
-                val nightamount=Firebase.remoteConfig.getLong("NIGHT_AMOUNT").toString().toInt()
+            } else {
+                val nightamount = Firebase.remoteConfig.getLong("NIGHT_AMOUNT").toString().toInt()
 
                 if (distance <= minimumDistance) {
                     cost = nightamount
                 } else {
-                    cost = (((distance.minus(minimumDistance)).times(percentage)).toInt()).plus(nightamount)
+                    cost = (((distance.minus(minimumDistance)).times(percentage)).toInt()).plus(
+                        nightamount
+                    )
                     cost = (round((cost + 5) / 10.0) * 10).roundToInt()
                 }
             }
         }
-        trip.cost=cost
-        binding.costView.text="Ksh.$cost"
-        trip.icons_id=currentUser.icons_id
-        trip.fromLatLng= LocationObj(pickupLatLng!!.latitude,pickupLatLng!!.longitude)
-        trip.toLatLng= LocationObj(destinationLatLng!!.latitude,destinationLatLng!!.longitude)
-        trip.userName=currentUser.user_name
-        trip.userPhone=currentUser.user_phone
-        trip.journeyId= (System.nanoTime() and 0xfffff).toInt()
-        trip.startTime=System.currentTimeMillis()
+        trip.cost = cost
+        binding.costView.text = "Ksh.$cost"
+        trip.icons_id = currentUser.icons_id
+        trip.fromLatLng = LocationObj(pickupLatLng!!.latitude, pickupLatLng!!.longitude)
+        trip.toLatLng = LocationObj(destinationLatLng!!.latitude, destinationLatLng!!.longitude)
+        trip.userName = currentUser.user_name
+        trip.userPhone = currentUser.user_phone
+        trip.journeyId = (System.nanoTime() and 0xfffff).toInt()
+        trip.startTime = System.currentTimeMillis()
         binding.summaryLayout.show()
 
     }
@@ -615,16 +692,17 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
         calendar.timeZone = TimeZone.getTimeZone("Africa/Nairobi")
         return calendar.get(Calendar.HOUR_OF_DAY)
     }
+
     private fun getDistance(): Float {
-        if (tripDistance!=null){
-            if (tripDistance!!.contains("km",true)){
+        if (tripDistance != null) {
+            if (tripDistance!!.contains("km", true)) {
 
-                return tripDistance!!.replace("km","",true)
+                return tripDistance!!.replace("km", "", true)
                     .trim().toFloat()
-            }else
-                if (tripDistance!!.contains("m",true)){
+            } else
+                if (tripDistance!!.contains("m", true)) {
 
-                    return tripDistance!!.replace("m","",true)
+                    return tripDistance!!.replace("m", "", true)
                         .trim().toFloat()
                 }
         }
@@ -644,42 +722,42 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
         return format.format(distance.div(1000)).toFloat()
 
     }
+
     private fun roundToNearest10(int: Int): Int {
-        if (int.toString().endsWith("0")){
+        if (int.toString().endsWith("0")) {
             return int
         }
         return (round((int - 5) / 10.0) * 10).roundToInt()
     }
-    private fun getNairobiPricing(distance:Float): Int {
-        val below05=Firebase.remoteConfig.getLong("NAIROBI_BELOW_05").toString().toInt()
-        val baseToNine=  Firebase.remoteConfig.getLong("DEFAULT_AMOUNT_NAIROBI").toString().toInt()
-        if (distance<=0.5){
+
+    private fun getNairobiPricing(distance: Float): Int {
+        val below05 = Firebase.remoteConfig.getLong("NAIROBI_BELOW_05").toString().toInt()
+        val baseToNine = Firebase.remoteConfig.getLong("DEFAULT_AMOUNT_NAIROBI").toString().toInt()
+        if (distance <= 0.5) {
             return below05
-        }else
-            if (distance>0.5 && distance<=1){
+        } else
+            if (distance > 0.5 && distance <= 1) {
                 return ((distance.minus(0.5)).times(90)).plus(60).roundToInt()
-            }else
-                if (distance>1 && distance<2){
-                    val base=distance.minus(1).times(18)
+            } else
+                if (distance > 1 && distance < 2) {
+                    val base = distance.minus(1).times(18)
                     return base.plus(baseToNine).roundToInt()
-                }
-                else
-                    if (distance>1 && distance<3){
-                        val base=distance.minus(1).times(38)
+                } else
+                    if (distance > 1 && distance < 3) {
+                        val base = distance.minus(1).times(38)
                         return base.plus(baseToNine).roundToInt()
-                    }
-                    else
-                        if (distance>1 && distance<=10){
-                            val base=distance.minus(1).times(18)
+                    } else
+                        if (distance > 1 && distance <= 10) {
+                            val base = distance.minus(1).times(18)
                             return base.plus(baseToNine).roundToInt()
-                        }
-                        else{
-                            val base=400
-                            val price=distance.minus(10).times(10)
+                        } else {
+                            val base = 400
+                            val price = distance.minus(10).times(10)
                             return base.plus(price).roundToInt()
                         }
 
     }
+
     private fun animateToBounds() {
         bounds = LatLngBounds.builder()
         bounds.include(pickupLatLng!!)
@@ -824,6 +902,11 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+        if (this::currentUser.isInitialized){
+            getLastTrip()
+        }else{
+            getCurrentUser()
+        }
     }
 
     override fun onPause() {
