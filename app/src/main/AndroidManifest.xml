@@ -39,6 +39,12 @@
         <service android:name=".service.MyLocationService"
             android:exported="false"
             android:foregroundServiceType="location"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:value="R.drawable.ic_stat_name" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:value="@color/primary"/>
     </application>
 
 </manifest>
