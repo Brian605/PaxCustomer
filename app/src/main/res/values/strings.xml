@@ -53,4 +53,5 @@
     <string name="request">Request</string>
     <string name="where_to">Where To?</string>
     <string name="pickup_point">Pickup point</string>
+    <string name="default_notification_channel_id">Pax Boda Customer</string>
 </resources>

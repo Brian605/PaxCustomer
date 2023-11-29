@@ -359,6 +359,7 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
             onGranted = {
                 checkGpsEnabled()
+                checkNotificationPermissions()
             },
             onDenied = {
                 MaterialAlertDialogBuilder(requireContext())
@@ -380,8 +381,15 @@ class RequestFragment : Fragment(), OnMapReadyCallback, OnMapsSdkInitializedCall
                         dialog?.dismiss()
                     }.create()
                     .show()
+                checkNotificationPermissions()
 
             })
+    }
+
+    private fun checkNotificationPermissions() {
+        requireActivity().iNeed(Manifest.permission.POST_NOTIFICATIONS,
+            onGranted = {},
+            onDenied = {})
     }
 
     private var resultLauncher =
